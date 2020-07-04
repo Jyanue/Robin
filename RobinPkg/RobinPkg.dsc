@@ -124,10 +124,13 @@
   RobinPkg/Applications/EchoTcp4/EchoTcp4.inf
   RobinPkg/Applications/stdEchoTcp4/stdEchoTcp4.inf
   RobinPkg/Applications/stdEchoUdp4/stdEchoUdp4.inf
+  RobinPkg/Applications/ListVariable/ListVariable.inf
+  
   #luobing add 2019-10-13 20:59:30 
   RobinPkg/Drivers/HiiResourcesSampleDxe/HiiResourcesSampleDxe.inf
   RobinPkg/Drivers/ServiceDrvSample/ServiceDrvSample.inf
-
+	RobinPkg/Drivers/MyWizardDrv01/MyWizardDriver.inf
+	
   
 	# _LuoApp/Luo2/Luo2.inf
 	# _LuoApp/Luo3/Luo3.inf
