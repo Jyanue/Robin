@@ -126,7 +126,7 @@
   RobinPkg/Applications/stdEchoUdp4/stdEchoUdp4.inf
   RobinPkg/Applications/ListVariable/ListVariable.inf
   RobinPkg/Applications/TestServiceDrv/TestServiceDrv.inf
-  
+  RobinPkg/Applications/Snake/Snake.inf
   
   #luobing add 2019-10-13 20:59:30 
   RobinPkg/Drivers/HiiResourcesSampleDxe/HiiResourcesSampleDxe.inf
