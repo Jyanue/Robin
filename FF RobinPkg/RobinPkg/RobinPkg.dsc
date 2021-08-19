@@ -127,6 +127,10 @@
   RobinPkg/Applications/ListVariable/ListVariable.inf
   RobinPkg/Applications/TestServiceDrv/TestServiceDrv.inf
   RobinPkg/Applications/Snake/Snake.inf
+  RobinPkg/Applications/HelloHid/HelloHid.inf
+  RobinPkg/Applications/RngUEFI/RngUEFI.inf
+  RobinPkg/Applications/Maze/MazeGame.inf 
+  RobinPkg/Applications/BounceGame/BounceGame.inf 
   
   #luobing add 2019-10-13 20:59:30 
   RobinPkg/Drivers/HiiResourcesSampleDxe/HiiResourcesSampleDxe.inf
