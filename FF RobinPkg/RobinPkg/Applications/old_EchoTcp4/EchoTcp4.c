@@ -31,8 +31,7 @@
 #include "KeyBoard.h"
 #include "Network.h"
 
-EFI_STATUS TCP4Test(IN int Argc,
-                    IN char **Argv);
+EFI_STATUS TCP4Test(UINT32 Ip32, UINT16 Port);
 /***
   Demonstrates basic workings of the main() function by displaying a
   welcoming message.
@@ -53,60 +52,43 @@ main (
   IN char **Argv
   )
 {
-	// UINT64 flag;
+	UINT64 flag;
 	
-	// flag = InintGloabalProtocols(S_TEXT_INPUT_EX | GRAPHICS_OUTPUT | PCI_ROOTBRIDGE_IO | PCI_IO | FILE_IO | RNG_OUT);
-	// Print(L"flag=%x\n",flag);
-	
-  TCP4Test(Argc,Argv);
+	flag = InintGloabalProtocols(S_TEXT_INPUT_EX | GRAPHICS_OUTPUT | PCI_ROOTBRIDGE_IO | PCI_IO | FILE_IO | RNG_OUT);
+	Print(L"flag=%x\n",flag);
+	// WaitKey();
+	//text out test
+
+	//Testnetwork
+  TCP4Test(MYIPV4(192, 168, 0, 111), 8888);
   return 0;
 }
 
-EFI_STATUS TCP4Test(IN int Argc,
-  IN char **Argv)
+EFI_STATUS TCP4Test(UINT32 Ip32,UINT16 Port)
 {
   EFI_STATUS Status = 0;
   UINTN myfd;
+  CHAR8 SendStr[] = "Hello,I'm a client of UEFI.";
   CHAR8 *RecvBuffer = (CHAR8*) malloc(1024);
   UINTN recvLen = 0;
-  UINT32 ServerIPAddr[4];
-  UINT16 ServerPort;
-  char msgStr[1024];
-  //1 get the server ip and port
-  if(Argc != 3)
-  {
-    printf("UEFI TCP Client by robin. Usage: %a <ServerIP> <port>\n", Argv[0]);
-    Status = EFI_ABORTED;
-    return Status;
-  }
-  else
-  {
-    sscanf(Argv[1], "%d.%d.%d.%d", &ServerIPAddr[0], &ServerIPAddr[1], &ServerIPAddr[2], &ServerIPAddr[3]);
-    sscanf(Argv[2], "%d", &ServerPort);
-  }
-  //2 connect server
+
   myfd = CreateTCP4Socket();
-  Status = ConnectTCP4Socket(myfd, MYIPV4(ServerIPAddr[0],ServerIPAddr[1],ServerIPAddr[2],ServerIPAddr[3]), ServerPort);
+  Status = ConnectTCP4Socket(myfd, Ip32, Port);
   
-  //3 echo test
-  while (1)
-  {
-    //4 send message to server and get message from server
-    memset(msgStr, 0, 1024);
-
-    printf("Please input message:");
-    gets(msgStr); //get string 
-    if (!strcmp(msgStr, "q") || !strcmp(msgStr, "Q"))
-      break;
-    Status = SendTCP4Socket(myfd, msgStr, AsciiStrLen(msgStr));
-    Status = RecvTCP4Socket(myfd, RecvBuffer, 1024, &recvLen);
-    RecvBuffer[recvLen] = '\0';
-    printf("Message from server: %s\n", RecvBuffer);
-  }
-
+  Status = SendTCP4Socket(myfd, SendStr, AsciiStrLen(SendStr));
+  Print(L"TCP4Test: SendTCP4Socket, %r\n", Status);
+  gBS->Stall(1000);
+  Print(L"TCP4Test: Length of SendStr is %d \n", AsciiStrLen(SendStr));
+  Status = RecvTCP4Socket(myfd, RecvBuffer, 1024, &recvLen);
+  Print(L"TCP4Test: RecvTCP4Socket, %r\n", Status);
+ 
+  Print(L"TCP4Test Recv: %d bytes\n", recvLen);
+  // AsciiPrint("Recv raw data:%c %c %c %c \n", RecvBuffer[0],RecvBuffer[1],RecvBuffer[2],RecvBuffer[3]);
+  RecvBuffer[recvLen] = '\0';
+  Print(L"TCP4Test: Recv data is: %a\n", RecvBuffer);
   Status = CloseTCP4Socket(myfd);
   if(EFI_ERROR(Status))
-    Print(L"close socket, %r\n", Status);
+    gST->ConOut->OutputString(gST->ConOut,L"Close tcp4 error!\n\r");
 
   free(RecvBuffer);
 

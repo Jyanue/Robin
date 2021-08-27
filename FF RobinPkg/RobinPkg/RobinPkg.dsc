@@ -131,13 +131,15 @@
   RobinPkg/Applications/RngUEFI/RngUEFI.inf
   RobinPkg/Applications/Maze/MazeGame.inf 
   RobinPkg/Applications/BounceGame/BounceGame.inf 
+  RobinPkg/Applications/ImageStack/ImageStack.inf 
+  RobinPkg/Applications/Diskdump/Diskdump.inf 
   
   #luobing add 2019-10-13 20:59:30 
   RobinPkg/Drivers/HiiResourcesSampleDxe/HiiResourcesSampleDxe.inf
   RobinPkg/Drivers/ServiceDrvSample/ServiceDrvSample.inf
 	RobinPkg/Drivers/MyWizardDrv01/MyWizardDriver.inf
 	RobinPkg/Drivers/ServiceDrv/ServiceDrv.inf
-	
+	RobinPkg/Drivers/PrintScreenLogger/PrintScreenLogger.inf
   
 	# _LuoApp/Luo2/Luo2.inf
 	# _LuoApp/Luo3/Luo3.inf

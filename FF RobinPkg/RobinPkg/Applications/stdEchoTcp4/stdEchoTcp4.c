@@ -136,7 +136,7 @@ EFI_STATUS tcp4Client(IN int Argc,
     recvLen = (int)recv(socketID, recvStr, sizeof(recvStr), 0);
     recvStr[recvLen] = '\0';
     //  Print(L"Message form server: %a\n", recvStr);
-    printf("Message form server: %s\n", recvStr);
+    printf("Message from server: %s\n", recvStr);
   }
   
   close(socketID);  

@@ -1,4 +1,6 @@
 
+
+
 #include "Network.h"
 
 
@@ -50,7 +52,7 @@ EFI_STATUS InitTcp4SocketFd(INTN index)
 
     //3 Create Transmit Event
     Status = gBS->CreateEvent(EVT_NOTIFY_WAIT, TPL_CALLBACK, (EFI_EVENT_NOTIFY)Tcp4SendNotify , (VOID*)CurSocket, &CurSocket->SendToken.CompletionToken.Event);
-    // Print(L"Init: CurSocket=%p TCP4SocketFd[index]=%p\n", CurSocket,TCP4SocketFd[index]);
+    Print(L"Init: CurSocket=%p TCP4SocketFd[index]=%p\n", CurSocket,TCP4SocketFd[index]);
     if(EFI_ERROR(Status)) 
     {
         gST->ConOut->OutputString(gST->ConOut,L"Init: Create Send Event fail!\n\r");
@@ -137,7 +139,7 @@ EFI_STATUS ConfigTCP4Socket(UINTN index, UINT32 Ip32, UINT16 Port)
     if(CurSocket->m_pTcp4ConfigData == NULL)
         return Status;
     CurSocket->m_pTcp4ConfigData->TypeOfService = 0;
-    CurSocket->m_pTcp4ConfigData->TimeToLive = 64;    
+    CurSocket->m_pTcp4ConfigData->TimeToLive = 16;    
     *(UINTN*)(CurSocket->m_pTcp4ConfigData->AccessPoint.RemoteAddress.Addr) = Ip32;
     CurSocket->m_pTcp4ConfigData->AccessPoint.RemotePort = Port;
     *(UINT32*)(CurSocket->m_pTcp4ConfigData->AccessPoint.SubnetMask.Addr) = (255 | 255 << 8 | 255 << 16 | 0 << 24) ;
@@ -145,14 +147,14 @@ EFI_STATUS ConfigTCP4Socket(UINTN index, UINT32 Ip32, UINT16 Port)
     CurSocket->m_pTcp4ConfigData->AccessPoint.UseDefaultAddress = TRUE;
 
     /// if UseDefaultAddress is FALSE， config StationAddress 
-    CurSocket->m_pTcp4ConfigData->AccessPoint.StationPort = 60000;
+    CurSocket->m_pTcp4ConfigData->AccessPoint.StationPort = 61558;
     CurSocket->m_pTcp4ConfigData->AccessPoint.ActiveFlag = TRUE;
     CurSocket->m_pTcp4ConfigData->ControlOption = NULL;
     Status = CurSocket->m_pTcp4Protocol ->Configure(CurSocket->m_pTcp4Protocol, CurSocket->m_pTcp4ConfigData);    
     return Status;
 }
 
-EFI_STATUS SendTCP4Socket(UINTN index, CHAR8* Data, UINTN Length)
+EFI_STATUS SendTCP4Socket(UINTN index, CHAR8* Data, UINTN Lenth)
 {
     EFI_STATUS Status = EFI_NOT_FOUND;
     MYTCP4SOCKET *CurSocket = TCP4SocketFd[index];
@@ -165,7 +167,7 @@ EFI_STATUS SendTCP4Socket(UINTN index, CHAR8* Data, UINTN Length)
     }
     CurSocket->m_TransData->Push = TRUE;
     CurSocket->m_TransData->Urgent = TRUE;
-    CurSocket->m_TransData->DataLength = (UINT32)Length;
+    CurSocket->m_TransData->DataLength = (UINT32)Lenth;
     CurSocket->m_TransData->FragmentCount = 1;
     CurSocket->m_TransData->FragmentTable[0].FragmentLength =CurSocket->m_TransData->DataLength;
     CurSocket->m_TransData->FragmentTable[0].FragmentBuffer =Data;
@@ -180,7 +182,7 @@ EFI_STATUS SendTCP4Socket(UINTN index, CHAR8* Data, UINTN Length)
         
         
 	Status = gBS->WaitForEvent(1, &(CurSocket->SendToken.CompletionToken.Event), &waitIndex);
-    // Print(L"Send: WaitForEvent, %r\n", Status);
+    Print(L"Send: WaitForEvent, %r\n", Status);
     return CurSocket->SendToken.CompletionToken.Status;
 }
 
@@ -205,7 +207,7 @@ EFI_STATUS RecvTCP4Socket(IN UINTN index, IN CHAR8* Buffer, IN UINTN Length, OUT
         return Status;
     }
     Status = gBS->WaitForEvent(1, &(CurSocket->RecvToken.CompletionToken.Event), &waitIndex);
-    // Print(L"Recv: WaitForEvent, %r\n", Status);
+    Print(L"Recv: WaitForEvent, %r\n", Status);
     *recvLength = CurSocket->m_RecvData->DataLength;
    
     return CurSocket->RecvToken.CompletionToken.Status;
@@ -225,7 +227,7 @@ EFI_STATUS ConnectTCP4Socket(UINTN index, UINT32 Ip32, UINT16 Port)
         return Status;
 
     Status = gBS->WaitForEvent(1, &(CurSocket->ConnectToken.CompletionToken.Event), &waitIndex);
-    // Print(L"Connect: WaitForEvent, %r\n", Status);
+    Print(L"Connect: WaitForEvent, %r\n", Status);
     // if( !EFI_ERROR(Status)){
     //     gST->ConOut->OutputString(gST->ConOut,L"Connect: WaitForEvent fail!\n\r");
     //     Status = CurSocket->ConnectToken.CompletionToken.Status;
