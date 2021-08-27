@@ -1,4 +1,4 @@
-# uefi-exolorer
+# uefi-explorer
 
 #### 介绍
 
