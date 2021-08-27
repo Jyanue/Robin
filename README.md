@@ -2,7 +2,7 @@
 
 #### 介绍
 
-![UEFIExplorer_logo](https://gitee.com/luobing4365/uefi-exolorer/blob/master/mygiteepic/logo-robin.png)<br>
+![UEFIExplorer_logo](https://gitee.com/luobing4365/uefi-exolorer/raw/master/mygiteepic/logo-robin.png)<br>
 与国内某大厂开发完隔离计算机之后，有几年的时间，一直在开发UEFI Option Rom。这几年逐渐开始开发其他产品，积累下来的UEFI代码也转交给其他同事维护。国内开发UEFI的人不多，与好友@张佩讨论后，总觉得很可惜。在他的鼓励下，开始撰写这个系列博客-UEFI开发探索，此仓库是用来存储博客中用到的代码的。
 
 #### 软件说明
